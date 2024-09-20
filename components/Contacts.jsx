@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import toast from "react-hot-toast";
+import ChatBox from "./ChatBox";
 
 const style = {
   position: "absolute",
@@ -30,6 +31,7 @@ const Contacts = () => {
   const [contacts, setContacts] = useState([]);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
+  const [chats, setChats] = useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { data: session } = useSession();
@@ -40,18 +42,37 @@ const Contacts = () => {
       const res = await fetch(
         search !== "" ? `/api/users/searchContact/${search}` : "/api/users"
       );
+
       const data = await res.json();
+      console.log(data);
       setContacts(data.filter((contact) => contact._id !== currentUser._id));
       setLoading(false);
     } catch (err) {
       console.log(err);
     }
   };
-
+  const getChats = async () => {
+    try {
+      const res = await fetch(
+        search !== ""
+          ? `/api/users/${currentUser._id}/searchChat/${search}`
+          : `/api/users/${currentUser._id}`
+      );
+      const data = await res.json();
+      setChats(data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
     if (currentUser) getContacts();
   }, [currentUser, search]);
-
+  useEffect(() => {
+    if (currentUser) {
+      getChats();
+    }
+  }, [currentUser, search]);
   /* SELECT CONTACT */
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [addGroup, setAddGroup] = useState(false);
@@ -158,9 +179,9 @@ const Contacts = () => {
   return loading ? (
     <Loader />
   ) : (
-    <div className="create-chat-container ">
+    <div className="create-chat-container">
       <div className="contact-bar">
-        <div className="create-chat">
+        <div className="">
           <div>
             <Modal
               open={open}
@@ -273,13 +294,6 @@ const Contacts = () => {
               </Box>
             </Modal>
           </div>
-          {/* <button
-            className="btn"
-            onClick={createChat}
-            disabled={selectedContacts.length === 0}
-          >
-            FIND OR START A NEW CHAT
-          </button> */}
         </div>
         <div className="contact-list">
           <div className="flex items-center gap-2">
@@ -294,7 +308,7 @@ const Contacts = () => {
             </div>
             <div className="lg:w-3/4">
               <input
-                placeholder="Search contact..."
+                placeholder="Tìm người liên hệ..."
                 className="input-search  border"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -314,27 +328,43 @@ const Contacts = () => {
             </div>
           </div>
 
-          <div className="flex flex-col flex-1 gap-5 overflow-y-scroll custom-scrollbar">
-            {contacts.map((user, index) => (
-              <div
-                key={index}
-                className="contact"
-                aria-disabled={selectedContacts.length === 0}
-                onClick={(e) => handleContactClick(user)}
-              >
-                {/* {selectedContacts.find((item) => item === user) ? (
+          <div className="flex flex-col flex-1 gap-5 overflow-y-scroll custom-scrollbar ">
+            {search &&
+              chats &&
+              chats?.map((chat, index) => (
+                <ChatBox
+                  chat={chat}
+                  index={index}
+                  currentUser={currentUser}
+                  currentChatId={chat?._id}
+                />
+              ))}
+            {search &&
+              contacts &&
+              contacts.map((user, index) => (
+                <div
+                  key={index}
+                  className="contact"
+                  aria-disabled={selectedContacts.length === 0}
+                  onClick={(e) => handleContactClick(user)}
+                >
+                  {/* {selectedContacts.find((item) => item === user) ? (
                   <CheckCircle sx={{ color: "red" }} />
                 ) : (
                   <RadioButtonUnchecked />
                 )} */}
-                <img
-                  src={user.profileImage || "/assets/person.jpg"}
-                  alt="profile"
-                  className="profilePhoto"
-                />
-                <p className="text-base-bold">{user.username}</p>
-              </div>
-            ))}
+                  {search.includes(user?.username) && (
+                    <>
+                      <img
+                        src={user.profileImage || "/assets/person.jpg"}
+                        alt="profile"
+                        className="profilePhoto"
+                      />
+                      <p className="text-base-bold">{user.username}</p>
+                    </>
+                  )}
+                </div>
+              ))}
           </div>
         </div>
       </div>

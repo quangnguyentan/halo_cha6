@@ -65,7 +65,6 @@ const GroupInfo = () => {
       if (res.ok) {
         router.push(`/chats/${chatId}`);
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +74,7 @@ const GroupInfo = () => {
     <Loader />
   ) : (
     <div className="profile-page">
-      <h1 className="text-heading3-bold">Edit Group Info</h1>
+      <h1 className="text-heading3-bold">Chỉnh sửa thông tin nhóm</h1>
 
       <form className="edit-profile" onSubmit={handleSubmit(updateGroupChat)}>
         <div className="input">
@@ -100,15 +99,17 @@ const GroupInfo = () => {
           <CldUploadButton
             options={{ maxFiles: 1 }}
             onUpload={uploadPhoto}
-            uploadPreset="upecg01j"
+            uploadPreset="i96i6rvi"
           >
-            <p className="text-body-bold">Upload new photo</p>
+            <p className="text-body-bold">Nhấn vào đây chỉnh sửa ảnh</p>
           </CldUploadButton>
         </div>
 
         <div className="flex flex-wrap gap-3">
           {chat?.members?.map((member, index) => (
-            <p className="selected-contact" key={index}>{member.username}</p>
+            <p className="selected-contact" key={index}>
+              {member.username}
+            </p>
           ))}
         </div>
 

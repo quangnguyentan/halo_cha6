@@ -11,7 +11,6 @@ export const GET = async (req, { params }) => {
     // const query = params.query
 
     const { userId, query } = params;
-
     const searchedChat = await Chat.find({
       members: userId,
       name: { $regex: query, $options: "i" },
@@ -29,7 +28,6 @@ export const GET = async (req, { params }) => {
         },
       })
       .exec();
-
     return new Response(JSON.stringify(searchedChat), { status: 200 });
   } catch (err) {
     console.log(err);

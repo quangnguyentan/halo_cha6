@@ -5,11 +5,12 @@ import {
   LockOutlined,
   PersonOutline,
 } from "@mui/icons-material";
+import CodeIcon from "@mui/icons-material/Code";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { signIn } from "next-auth/react"
+import { signIn } from "next-auth/react";
 
 const Form = ({ type }) => {
   const {
@@ -20,8 +21,9 @@ const Form = ({ type }) => {
   } = useForm();
 
   const router = useRouter();
-
+  console.log(watch("code"));
   const onSubmit = async (data) => {
+    console.log(data);
     if (type === "register") {
       const res = await fetch("/api/auth/register", {
         method: "POST",
@@ -44,7 +46,7 @@ const Form = ({ type }) => {
       const res = await signIn("credentials", {
         ...data,
         redirect: false,
-      })
+      });
 
       if (res.ok) {
         router.push("/chats");
@@ -55,8 +57,6 @@ const Form = ({ type }) => {
       }
     }
   };
-
-  
 
   return (
     <div className="auth">
@@ -70,15 +70,15 @@ const Form = ({ type }) => {
                 <input
                   defaultValue=""
                   {...register("username", {
-                    required: "Username is required",
+                    required: "Tên là bắt buộc",
                     validate: (value) => {
                       if (value.length < 3) {
-                        return "Username must be at least 3 characters";
+                        return "Tên phải lớn hơn 3 kí tự";
                       }
                     },
                   })}
                   type="text"
-                  placeholder="Username"
+                  placeholder="Tên tài khoản"
                   className="input-field"
                 />
                 <PersonOutline sx={{ color: "#737373" }} />
@@ -93,7 +93,7 @@ const Form = ({ type }) => {
             <div className="input">
               <input
                 defaultValue=""
-                {...register("email", { required: "Email is required" })}
+                {...register("email", { required: "Email là bắt buộc" })}
                 type="email"
                 placeholder="Email"
                 className="input-field"
@@ -110,18 +110,18 @@ const Form = ({ type }) => {
               <input
                 defaultValue=""
                 {...register("password", {
-                  required: "Password is required",
+                  required: "Mật khẩu là bắt buộc",
                   validate: (value) => {
                     if (
                       value.length < 5 ||
                       !value.match(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/)
                     ) {
-                      return "Password must be at least 5 characters and contain at least one special character";
+                      return "Mật khẩu phải có ít nhất 5 ký tự và chứa ít nhất một ký tự đặc biệt";
                     }
                   },
                 })}
                 type="password"
-                placeholder="Password"
+                placeholder="Mật khẩu"
                 className="input-field"
               />
               <LockOutlined sx={{ color: "#737373" }} />
@@ -130,19 +130,41 @@ const Form = ({ type }) => {
               <p className="text-red-500">{errors.password.message}</p>
             )}
           </div>
-
+          {type === "register" && (
+            <div>
+              <div className="input">
+                <input
+                  defaultValue=""
+                  {...register("code", {
+                    validate: (value) => {
+                      if (value.length < 1) {
+                        return "Mã giới thiệu phải lớn hơn 3 kí tự";
+                      }
+                    },
+                  })}
+                  type="text"
+                  placeholder="Mã giới thiệu"
+                  className="input-field"
+                />
+                <CodeIcon sx={{ color: "#737373" }} />
+              </div>
+              {errors.code && (
+                <p className="text-red-500">{errors.code.message}</p>
+              )}
+            </div>
+          )}
           <button className="button" type="submit">
-            {type === "register" ? "Join Free" : "Let's Chat"}
+            {type === "register" ? "Đăng kí" : "Bắt đầu chat"}
           </button>
         </form>
 
         {type === "register" ? (
           <Link href="/" className="link">
-            <p className="text-center">Already have an account? Sign In Here</p>
+            <p className="text-center">Đã có tài khoản? Đăng nhập ở đây</p>
           </Link>
         ) : (
           <Link href="/register" className="link">
-            <p className="text-center">Don't have an account? Register Here</p>
+            <p className="text-center">Không có tài khoản? Đăng kí ở đây</p>
           </Link>
         )}
       </div>

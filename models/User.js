@@ -21,7 +21,11 @@ const UserSchema = new mongoose.Schema({
   chats: {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
     default: [],
-  }
+  },
+  code: {
+    type: String,
+    default: "",
+  },
 });
 
 const User = mongoose.models.User || mongoose.model("User", UserSchema);

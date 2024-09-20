@@ -8,12 +8,16 @@ export const POST = async (req, res) => {
 
     const body = await req.json();
 
-    const { username, email, password } = body;
-
-    const existingUser = await User.findOne({ email });
-
-    if (existingUser) {
-      return new Response("User already exists", {
+    const { username, email, password, code } = body;
+    const existingUserName = await User.findOne({ username });
+    const existingEmal = await User.findOne({ email });
+    if (existingUserName) {
+      return new Response("Username already exists", {
+        status: 400,
+      });
+    }
+    if (existingEmal) {
+      return new Response("Email already exists", {
         status: 400,
       });
     }

@@ -71,7 +71,7 @@ const ChatList = ({ currentChatId }) => {
   ) : (
     <div className="chat-list">
       <input
-        placeholder="Search chat..."
+        placeholder="Tìm nhóm..."
         className="input-search"
         value={search}
         onChange={(e) => setSearch(e.target.value)}

@@ -63,7 +63,11 @@ const ChatDetails = ({ chatId }) => {
       console.log(err);
     }
   };
-
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && text.length > 0) {
+      sendText();
+    }
+  };
   const sendPhoto = async (result) => {
     try {
       const res = await fetch("/api/messages", {
@@ -183,11 +187,18 @@ const ChatDetails = ({ chatId }) => {
               className="input-field"
               value={text}
               onChange={(e) => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
               required
             />
           </div>
 
-          <div onClick={sendText}>
+          <div
+            onClick={() => {
+              if (text.length > 0) {
+                sendText();
+              }
+            }}
+          >
             <img src="/assets/send.jpg" alt="send" className="send-icon" />
           </div>
         </div>
