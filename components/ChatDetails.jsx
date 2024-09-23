@@ -228,12 +228,12 @@ const ChatDetails = ({ chatId }) => {
           ) : (
             <>
               <img
-                src={otherMembers[0].profileImage || "/assets/person.jpg"}
+                src={otherMembers[0]?.profileImage || "/assets/person.jpg"}
                 alt="profile photo"
                 className="profilePhoto"
               />
               <div className="text">
-                <p>{otherMembers[0].username}</p>
+                <p>{otherMembers[0]?.username}</p>
               </div>
             </>
           )}
