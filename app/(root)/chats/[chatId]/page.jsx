@@ -2,6 +2,7 @@
 
 import ChatDetails from "@components/ChatDetails";
 import ChatList from "@components/ChatList";
+import Contacts from "@components/Contacts";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
@@ -35,7 +36,8 @@ const ChatPage = () => {
   return (
     <div className="main-container">
       <div className="w-1/3 max-lg:hidden">
-        <ChatList currentChatId={chatId} />
+        {/* <ChatList currentChatId={chatId} /> */}
+        <Contacts/>
       </div>
       <div className="w-2/3 max-lg:w-full">
         <ChatDetails chatId={chatId} />

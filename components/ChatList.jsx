@@ -70,12 +70,12 @@ const ChatList = ({ currentChatId }) => {
     <Loader />
   ) : (
     <div className="chat-list">
-      <input
+      {/* <input
         placeholder="Tìm nhóm..."
         className="input-search"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-      />
+      /> */}
 
       <div className="chats">
         {chats?.map((chat, index) => (

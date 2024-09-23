@@ -17,20 +17,20 @@ const TopBar = () => {
   const user = session?.user;
 
   return (
-    <div className="topbar">
+    <div className="topbar z-20">
       <Link href="/chats">
         <img src="/assets/logo.png" alt="logo" className="logo" />
       </Link>
 
-      <div className="menu">
-        <Link
+      <div className="menu ">
+        {/* <Link
           href="/chats"
           className={`${
             pathname === "/chats" ? "text-red-1" : ""
           } text-heading4-bold`}
         >
           Messenger
-        </Link>
+        </Link> */}
         {/* <Link
           href="/contacts"
           className={`${

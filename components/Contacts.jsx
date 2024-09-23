@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import toast from "react-hot-toast";
 import ChatBox from "./ChatBox";
+import ChatList from "./ChatList";
 
 const style = {
   position: "absolute",
@@ -30,9 +31,9 @@ const Contacts = () => {
   const [loading, setLoading] = useState(true);
   const [contacts, setContacts] = useState([]);
   const [search, setSearch] = useState("");
-  const [open, setOpen] = useState(false);
   const [chats, setChats] = useState([]);
   const handleOpen = () => setOpen(true);
+  const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   const { data: session } = useSession();
   const currentUser = session?.user;
@@ -44,7 +45,6 @@ const Contacts = () => {
       );
 
       const data = await res.json();
-      console.log(data);
       setContacts(data.filter((contact) => contact._id !== currentUser._id));
       setLoading(false);
     } catch (err) {
@@ -171,7 +171,6 @@ const Contacts = () => {
       }),
     });
     const chat = await res.json();
-    console.log(chat);
     if (res.ok) {
       router.push(`/chats/${chat._id}`);
     }
@@ -180,7 +179,7 @@ const Contacts = () => {
     <Loader />
   ) : (
     <div className="create-chat-container">
-      <div className="contact-bar">
+      <div className="">
         <div className="">
           <div>
             <Modal
@@ -297,26 +296,26 @@ const Contacts = () => {
         </div>
         <div className="contact-list">
           <div className="flex items-center gap-2">
-            <div className="lg:w-1/4 max-sm:flex-none max-sm:hidden">
+            <div className="w-1/4 max-sm:flex-none max-sm:hidden">
               <button
                 className="flex gap-2 w-full items-center "
                 onClick={handleOpen}
               >
                 <GroupIcon />
-                <p>Tạo nhóm</p>
+                <p className="text-small-medium">Tạo nhóm</p>
               </button>
             </div>
-            <div className="lg:w-3/4">
+            <div className="w-3/4">
               <input
                 placeholder="Tìm người liên hệ..."
-                className="input-search  border"
+                className="input-search w-full border"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <p className="text-body-bold w-1/2">Người liên hệ</p>
+            {/* <p className="text-body-bold w-1/2">Người liên hệ</p> */}
             <div className="sm:w-1/2 md:hidden">
               <button
                 className="flex gap-2 w-full items-center "
@@ -328,32 +327,40 @@ const Contacts = () => {
             </div>
           </div>
 
-          <div className="flex flex-col flex-1 gap-5 overflow-y-scroll custom-scrollbar ">
-            {search &&
-              chats &&
-              chats?.map((chat, index) => (
-                <ChatBox
-                  chat={chat}
-                  index={index}
-                  currentUser={currentUser}
-                  currentChatId={chat?._id}
-                />
-              ))}
-            {search &&
-              contacts &&
-              contacts.map((user, index) => (
-                <div
-                  key={index}
-                  className="contact"
-                  aria-disabled={selectedContacts.length === 0}
-                  onClick={(e) => handleContactClick(user)}
-                >
-                  {/* {selectedContacts.find((item) => item === user) ? (
+          <div className="flex flex-col flex-1 gap-5 overflow-y-scroll custom-scrollbar relative">
+            <ChatList />
+            <div
+              className={`${search ? "absolute w-full p-2 top-0 h-screen bg-slate-600 rounded-md flex flex-col gap-4" : ""}`}
+            >
+              {contacts.length === 0 && chats.length === 0 && (
+                <div className="absolute w-full p-2 top-0 h-screen bg-slate-600 rounded-md flex flex-col gap-4">
+                  <h3>Không tìm thấy liên hệ nào</h3>
+                </div>
+              )}
+              {search &&
+                chats.length > 0 &&
+                chats?.map((chat, index) => (
+                  <ChatBox
+                    chat={chat}
+                    index={index}
+                    currentUser={currentUser}
+                    currentChatId={chat?._id}
+                  />
+                ))}
+              {search &&
+                contacts.length > 0 &&
+                contacts.map((user, index) => (
+                  <div
+                    key={index}
+                    className={`contact ${search ? "bg-blue-2 rounded-xl px-2 py-2" : ""}  `}
+                    aria-disabled={selectedContacts.length === 0}
+                    onClick={(e) => handleContactClick(user)}
+                  >
+                    {/* {selectedContacts.find((item) => item === user) ? (
                   <CheckCircle sx={{ color: "red" }} />
                 ) : (
                   <RadioButtonUnchecked />
                 )} */}
-                  {search.includes(user?.username) && (
                     <>
                       <img
                         src={user.profileImage || "/assets/person.jpg"}
@@ -362,9 +369,9 @@ const Contacts = () => {
                       />
                       <p className="text-base-bold">{user.username}</p>
                     </>
-                  )}
-                </div>
-              ))}
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>
