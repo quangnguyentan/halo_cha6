@@ -45,7 +45,7 @@
 
 /* Main Container */
 .main-container {
-  @apply h-screen flex justify-between gap-5 px-10 py-3 max-lg:gap-8;
+  @apply h-screen flex justify-between gap-5 px-10 max-sm:px-0 py-3 max-lg:gap-8;
 }
 
 /* Top Bar */
@@ -151,11 +151,11 @@
 
 /* ChatDetails */
 .chat-details {
-  @apply h-screen flex flex-col bg-white rounded-2xl;
+  @apply h-screen flex flex-col bg-white rounded-2xl ;
 }
 @media (max-width: 640px) { /* Thay đổi kích thước nếu cần */
   .chat-details {
-    @apply h-calc-full
+    @apply h-screen 
   }
 }
 /* Chat Header */

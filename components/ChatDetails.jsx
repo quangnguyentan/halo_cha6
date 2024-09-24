@@ -250,11 +250,11 @@ const ChatDetails = ({ chatId }) => {
 
   const bottomRef = useRef(null);
 
-  // useEffect(() => {
-  //   bottomRef.current?.scrollIntoView({
-  //     behavior: "smooth",
-  //   });
-  // }, [chat?.messages]);
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [chat?.messages]);
   return loading ? (
     <Loader />
   ) : (
