@@ -1,7 +1,7 @@
 import User from "@models/User";
 import { connectToDB } from "@mongodb";
 import { hash } from "bcryptjs";
-
+import randomstring from "randomstring";
 export const POST = async (req, res) => {
   try {
     await connectToDB();
@@ -12,22 +12,26 @@ export const POST = async (req, res) => {
     const existingUserName = await User.findOne({ username });
     const existingEmal = await User.findOne({ email });
     if (existingUserName) {
-      return new Response("Username already exists", {
+      return new Response("Tên đã tồn tại", {
         status: 400,
       });
     }
     if (existingEmal) {
-      return new Response("Email already exists", {
+      return new Response("Email đã tồn tại", {
         status: 400,
       });
     }
 
     const hashedPassword = await hash(password, 10);
-
+    let hashCode = randomstring.generate({
+      length: 7,
+      charset: "alphabetic",
+    });
     const newUser = await User.create({
       username,
       email,
       password: hashedPassword,
+      code: code ? code : hashCode,
     });
 
     await newUser.save();

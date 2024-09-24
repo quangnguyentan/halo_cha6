@@ -23,7 +23,6 @@ const Form = ({ type }) => {
   const router = useRouter();
   console.log(watch("code"));
   const onSubmit = async (data) => {
-    console.log(data);
     if (type === "register") {
       const res = await fetch("/api/auth/register", {
         method: "POST",
@@ -37,8 +36,9 @@ const Form = ({ type }) => {
         router.push("/");
       }
 
-      if (res.error) {
-        toast.error("Something went wrong");
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        toast.error(errorMessage);
       }
     }
 
@@ -53,7 +53,7 @@ const Form = ({ type }) => {
       }
 
       if (res.error) {
-        toast.error("Invalid email or password");
+        toast.error("Sai tên đăng nhập hoặc mật khẩu");
       }
     }
   };
@@ -135,22 +135,16 @@ const Form = ({ type }) => {
               <div className="input">
                 <input
                   defaultValue=""
-                  {...register("code", {
-                    validate: (value) => {
-                      if (value.length < 1) {
-                        return "Mã giới thiệu phải lớn hơn 3 kí tự";
-                      }
-                    },
-                  })}
+                  {...register("code")}
                   type="text"
                   placeholder="Mã giới thiệu"
                   className="input-field"
                 />
                 <CodeIcon sx={{ color: "#737373" }} />
               </div>
-              {errors.code && (
+              {/* {errors.code && (
                 <p className="text-red-500">{errors.code.message}</p>
-              )}
+              )} */}
             </div>
           )}
           <button className="button" type="submit">

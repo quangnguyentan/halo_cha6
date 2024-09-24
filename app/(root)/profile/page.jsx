@@ -58,29 +58,9 @@ const Profile = () => {
     <Loader />
   ) : (
     <div className="profile-page">
-      <h1 className="text-heading3-bold">Edit Your Profile</h1>
+      <h1 className="text-heading3-bold">Chỉnh sửa thông tin</h1>
 
       <form className="edit-profile" onSubmit={handleSubmit(updateUser)}>
-        <div className="input">
-          <input
-            {...register("username", {
-              required: "Username is required",
-              validate: (value) => {
-                if (value.length < 3) {
-                  return "Username must be at least 3 characters";
-                }
-              },
-            })}
-            type="text"
-            placeholder="Username"
-            className="input-field"
-          />
-          <PersonOutline sx={{ color: "#737373" }} />
-        </div>
-        {error?.username && (
-          <p className="text-red-500">{error.username.message}</p>
-        )}
-
         <div className="flex items-center justify-between">
           <img
             src={
@@ -96,12 +76,22 @@ const Profile = () => {
             onUpload={uploadPhoto}
             uploadPreset="i96i6rvi"
           >
-            <p className="text-body-bold">Upload new photo</p>
+            <p className="text-body-bold">
+              Click vào đây để chỉnh sửa ảnh đại diện
+            </p>
           </CldUploadButton>
+        </div>
+        <div className="flex items-center gap-4 ">
+          <h3 className="font-semibold ">Tên tài khoản:</h3>
+          <h3 className="font-semibold ">{user?.username}</h3>
+        </div>
+        <div className="flex items-center gap-4 ">
+          <h3 className="font-semibold ">Mã giới thiệu của bạn:</h3>
+          <h3 className="font-semibold ">{user?.code}</h3>
         </div>
 
         <button className="btn" type="submit">
-          Save Changes
+          Lưu thay đổi
         </button>
       </form>
     </div>

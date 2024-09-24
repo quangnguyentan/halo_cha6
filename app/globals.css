@@ -127,6 +127,11 @@
 .contact-list {
   @apply h-screen w-full max-lg:w-full flex flex-col gap-5 bg-white rounded-3xl py-5 px-8 mb-20;
 }
+@media (max-width: 640px) { /* Thay đổi kích thước nếu cần */
+  .contact-list {
+    @apply px-0
+  }
+}
 
 .contact {
   @apply flex gap-3 items-center cursor-pointer;
@@ -148,7 +153,11 @@
 .chat-details {
   @apply h-screen flex flex-col bg-white rounded-2xl;
 }
-
+@media (max-width: 640px) { /* Thay đổi kích thước nếu cần */
+  .chat-details {
+    @apply h-calc-full
+  }
+}
 /* Chat Header */
 .chat-header {
   @apply flex items-center gap-4 px-8 py-3 text-body-bold;

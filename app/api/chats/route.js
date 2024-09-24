@@ -9,15 +9,32 @@ export const POST = async (req) => {
 
     const body = await req.json();
 
-    const { currentUserId, members, isGroup, name, groupPhoto, chatIdGroup } =
-      body;
-    console.log("members", members);
+    const {
+      currentUserId,
+      members,
+      isGroup,
+      name,
+      groupPhoto,
+      chatIdGroup,
+      outGroup,
+    } = body;
     // Define "query" to find the chat
     const query = isGroup
       ? { isGroup, name, groupPhoto, members: [currentUserId, ...members] }
       : { members: { $all: [currentUserId, ...members], $size: 2 } };
-    console.log(chatIdGroup);
     let chat = await Chat.findOne(query);
+    if (!chat && outGroup) {
+      const findUser = await Chat.findById(chatIdGroup);
+      console.log(findUser);
+      // if (findUser) {
+      //   const updatedChat = await Chat.findByIdAndUpdate(
+      //     chatIdGroup,
+      //     { members: updatedMembers },
+      //     { new: true }
+      //   );
+      //   console.log(updatedChat);
+      // }
+    }
     if (!chat && !currentUserId) {
       const findUser = await Chat.findById(chatIdGroup);
       if (findUser) {
@@ -30,19 +47,9 @@ export const POST = async (req) => {
         );
         console.log(updatedChat);
       }
-
-      // const updateAllMembers = chat.members.map(async (memberId) => {
-      //   await User.findByIdAndUpdate(
-      //     memberId,
-      //     {
-      //       $addToSet: { chats: chat._id },
-      //     },
-      //     { new: true }
-      //   );
-      // });
-      // Promise.all(updateAllMembers);
     }
     if (!chat && currentUserId) {
+      console.log("xyz");
       chat = await new Chat(
         isGroup ? query : { members: [currentUserId, ...members] }
       );
@@ -67,6 +74,56 @@ export const POST = async (req) => {
     }
 
     return new Response(JSON.stringify(chat), { status: 200 });
+  } catch (err) {
+    console.error(err);
+    return new Response("Failed to create a new chat", { status: 500 });
+  }
+};
+
+export const PUT = async (req) => {
+  try {
+    await connectToDB();
+
+    const body = await req.json();
+
+    const { currentUserId, chatIdGroup, outGroup, joinGroup, deleteGroup } =
+      body;
+    let findUser;
+    if (outGroup) {
+      findUser = await Chat.findById(chatIdGroup);
+      if (findUser) {
+        const updatedMembers = findUser?.members?.filter(
+          (memberId) => memberId?.toString() !== currentUserId?.toString()
+        );
+        const updateUser = await Chat.findByIdAndUpdate(
+          chatIdGroup,
+          { members: updatedMembers },
+          { new: true }
+        );
+
+        if (updateUser && updateUser?.members?.length === 0) {
+          await Chat.findByIdAndDelete(chatIdGroup);
+        }
+      }
+    }
+    if (joinGroup) {
+      findUser = await Chat.findById(chatIdGroup);
+      if (findUser) {
+        await Chat.findByIdAndUpdate(
+          chatIdGroup,
+          {
+            members: [...findUser?.members, currentUserId],
+          },
+          { new: true }
+        );
+      }
+    }
+    if (deleteGroup) {
+      const deleteAll = await Chat.findByIdAndDelete(chatIdGroup);
+      console.log(deleteAll);
+    }
+
+    return new Response(JSON.stringify(findUser), { status: 200 });
   } catch (err) {
     console.error(err);
     return new Response("Failed to create a new chat", { status: 500 });

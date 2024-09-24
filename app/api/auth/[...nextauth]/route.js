@@ -11,7 +11,7 @@ const handler = NextAuth({
       name: "Credentials",
       async authorize(credentials, req) {
         if (!credentials.email || !credentials.password) {
-          throw new Error("Invalid email or password");
+          throw new Error("Sai email hoặc mật khẩu");
         }
 
         await connectToDB();
@@ -19,13 +19,13 @@ const handler = NextAuth({
         const user = await User.findOne({ email: credentials.email });
 
         if (!user || !user?.password) {
-          throw new Error("Invalid email or password");
+          throw new Error("Sai email hoặc mật khẩu");
         }
 
         const isMatch = await compare(credentials.password, user.password);
 
         if (!isMatch) {
-          throw new Error("Invalid password");
+          throw new Error("Không đúng mật khẩu");
         }
 
         return user;

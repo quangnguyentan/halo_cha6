@@ -9,12 +9,17 @@ import GroupIcon from "@mui/icons-material/Group";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+
 import Modal from "@mui/material/Modal";
 import toast from "react-hot-toast";
 import ChatBox from "./ChatBox";
 import ChatList from "./ChatList";
-
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 const style = {
   position: "absolute",
   top: "50%",
@@ -66,18 +71,24 @@ const Contacts = () => {
     }
   };
   useEffect(() => {
-    if (currentUser) getContacts();
+    const delayDebounceFn = setTimeout(() => {
+      if (currentUser) getContacts();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
   }, [currentUser, search]);
   useEffect(() => {
-    if (currentUser) {
-      getChats();
-    }
+    const delayDebounceFn = setTimeout(() => {
+      if (currentUser) {
+        getChats();
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
   }, [currentUser, search]);
   /* SELECT CONTACT */
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [addGroup, setAddGroup] = useState(false);
   const isGroup = selectedContacts.length > 1;
-
   const handleSelect = (contact) => {
     //select a user to chat
     if (selectedContacts.includes(contact)) {
@@ -175,6 +186,7 @@ const Contacts = () => {
       router.push(`/chats/${chat._id}`);
     }
   };
+  console.log(selectedContacts);
   return loading ? (
     <Loader />
   ) : (
@@ -236,6 +248,8 @@ const Contacts = () => {
                 {addGroup && (
                   <div className="w-full flex flex-col gap-4 h-[340px]">
                     <input
+                      autoFocus
+                      autoComplete="off"
                       placeholder="Search contact..."
                       className="input-search w-full border"
                       value={search}
@@ -243,33 +257,105 @@ const Contacts = () => {
                     />
 
                     <div className="flex flex-col flex-1 gap-5 overflow-y-scroll custom-scrollbar">
-                      {contacts.map((user, index) => (
+                      {selectedContacts?.map((selected, index) => (
                         <div
                           key={index}
                           className="contact"
-                          aria-disabled={selectedContacts.length === 0}
-                          onClick={(e) => handleSelect(user)}
+                          // aria-disabled={selectedContacts.length === 0}
+                          onClick={(e) => handleSelect(selected)}
                         >
-                          {selectedContacts.find((item) => item === user) ? (
+                          {selectedContacts.find(
+                            (item) => item === selected
+                          ) ? (
                             <CheckCircle sx={{ color: "red" }} />
                           ) : (
                             <RadioButtonUnchecked />
                           )}
                           <img
-                            src={user.profileImage || "/assets/person.jpg"}
+                            src={selected?.profileImage || "/assets/person.jpg"}
                             alt="profile"
                             className="profilePhoto"
                           />
-                          <p className="text-base-bold">{user.username}</p>
+                          <p className="text-base-bold">{selected?.username}</p>
                         </div>
                       ))}
+                      {search &&
+                        contacts.map((user, index) => (
+                          <>
+                            {user?.username === search && (
+                              <div
+                                key={index}
+                                className="contact"
+                                aria-disabled={selectedContacts.length === 0}
+                                onClick={(e) => {
+                                  handleSelect(user);
+                                  setSearch("");
+                                }}
+                              >
+                                {selectedContacts?.length > 0 ? (
+                                  <div>
+                                    {selectedContacts?.find(
+                                      (select) => select?._id == user?._id
+                                    ) ? (
+                                      ""
+                                    ) : (
+                                      <div className="contact">
+                                        {selectedContacts.find(
+                                          (item) => item === user
+                                        ) ? (
+                                          <CheckCircle sx={{ color: "red" }} />
+                                        ) : (
+                                          <RadioButtonUnchecked />
+                                        )}
+                                        <img
+                                          src={
+                                            user?.profileImage ||
+                                            "/assets/person.jpg"
+                                          }
+                                          alt="profile"
+                                          className="profilePhoto"
+                                        />
+                                        <p className="text-base-bold">
+                                          {user?.username}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="flex gap-2 items-center">
+                                    {selectedContacts.find(
+                                      (item) => item === user
+                                    ) ? (
+                                      <CheckCircle sx={{ color: "red" }} />
+                                    ) : (
+                                      <RadioButtonUnchecked />
+                                    )}
+                                    <img
+                                      src={
+                                        user?.profileImage ||
+                                        "/assets/person.jpg"
+                                      }
+                                      alt="profile"
+                                      className="profilePhoto"
+                                    />
+                                    <p className="text-base-bold">
+                                      {user?.username}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </>
+                        ))}
                     </div>
                     <div className="flex items-center w-full justify-end gap-4">
                       <button
                         className="text-sm font-semibold"
                         onClick={() => {
+                          setSearch("");
                           setAddGroup(false);
                           setName("");
+                          setSelectedContacts([]);
                         }}
                       >
                         Hủy
@@ -281,6 +367,7 @@ const Contacts = () => {
                           if (selectedContacts.length <= 1) {
                             toast.error("Cần chọn 2 người trở lên");
                           } else {
+                            setSearch("");
                             createGroupChat();
                           }
                         }}
@@ -294,86 +381,177 @@ const Contacts = () => {
             </Modal>
           </div>
         </div>
-        <div className="contact-list">
-          <div className="flex items-center gap-2">
-            <div className="w-1/4 max-sm:flex-none max-sm:hidden">
-              <button
-                className="flex gap-2 w-full items-center "
-                onClick={handleOpen}
-              >
-                <GroupIcon />
-                <p className="text-small-medium">Tạo nhóm</p>
-              </button>
+        {addGroup ? (
+          ""
+        ) : (
+          <div className="contact-list">
+            <div className="flex items-center justify-end">
+              {/* <p className="text-body-bold w-1/2">Người liên hệ</p> */}
+              <div className="sm:w-1/2 md:hidden px-2">
+                <button
+                  className="flex gap-2 w-full items-center "
+                  onClick={handleOpen}
+                >
+                  <GroupIcon />
+                  <p className="font-semibold ">Tạo nhóm</p>
+                </button>
+              </div>
             </div>
-            <div className="w-3/4">
-              <input
-                placeholder="Tìm người liên hệ..."
-                className="input-search w-full border"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
+            <div className="flex items-center gap-2">
+              <div className="w-1/4 max-sm:flex-none max-sm:hidden">
+                <button
+                  className="flex gap-2 w-full items-center "
+                  onClick={handleOpen}
+                >
+                  <GroupIcon />
+                  <p className="text-small-medium font-semibold">Tạo nhóm</p>
+                </button>
+              </div>
+              <div className="lg:w-3/4 max-sm:w-full max-sm:px-2">
+                <input
+                  autoFocus
+                  autoComplete="off"
+                  placeholder="Tìm người liên hệ..."
+                  className="input-search w-full border"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
             </div>
-          </div>
-          <div className="flex items-center justify-between">
-            {/* <p className="text-body-bold w-1/2">Người liên hệ</p> */}
-            <div className="sm:w-1/2 md:hidden">
-              <button
-                className="flex gap-2 w-full items-center "
-                onClick={handleOpen}
-              >
-                <GroupIcon />
-                <p>Tạo nhóm</p>
-              </button>
-            </div>
-          </div>
 
-          <div className="flex flex-col flex-1 gap-5 overflow-y-scroll custom-scrollbar relative">
-            <ChatList />
-            <div
-              className={`${search ? "absolute w-full p-2 top-0 h-screen bg-slate-600 rounded-md flex flex-col gap-4" : ""}`}
-            >
-              {contacts.length === 0 && chats.length === 0 && (
-                <div className="absolute w-full p-2 top-0 h-screen bg-slate-600 rounded-md flex flex-col gap-4">
-                  <h3>Không tìm thấy liên hệ nào</h3>
+            <div className="flex flex-col  flex-1 gap-5 overflow-y-scroll custom-scrollbar relative">
+              {search.length > 0 ? (
+                ""
+              ) : (
+                <div>
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ArrowDropDownIcon />}
+                      aria-controls="panel1-content"
+                      id="panel1-header"
+                    >
+                      <Typography sx={{ fontWeight: 700 }}>
+                        Danh sách bạn bè
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        {contacts && contacts?.length > 0 ? (
+                          contacts?.map((user, index) => (
+                            <div
+                              key={index}
+                              className={`contact `}
+                              aria-disabled={selectedContacts.length === 0}
+                              onClick={(e) => handleContactClick(user)}
+                            >
+                              {user?.code === currentUser?.code && (
+                                <div className="flex gap-4 items-center">
+                                  <img
+                                    src={
+                                      user?.profileImage || "/assets/person.jpg"
+                                    }
+                                    alt="profile"
+                                    className="profilePhoto"
+                                  />
+                                  <p className="text-base-bold">
+                                    {user?.username}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          ))
+                        ) : (
+                          <h3 className="font-semibold">
+                            Chưa có bất kì bạn bè nào! Hãy nhập mã giới thiệu ở
+                            trong hồ sơ hoặc tìm kiếm để chat
+                          </h3>
+                        )}
+                      </Typography>
+                    </AccordionDetails>
+                  </Accordion>
+                  <Accordion defaultExpanded>
+                    <AccordionSummary
+                      expandIcon={<ArrowDropDownIcon />}
+                      aria-controls="panel2-content"
+                      id="panel2-header"
+                    >
+                      <Typography sx={{ fontWeight: 700 }}>
+                        Danh sách chat
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography>
+                        <ChatList />
+                      </Typography>
+                    </AccordionDetails>
+                  </Accordion>
                 </div>
               )}
-              {search &&
-                chats.length > 0 &&
-                chats?.map((chat, index) => (
-                  <ChatBox
-                    chat={chat}
-                    index={index}
-                    currentUser={currentUser}
-                    currentChatId={chat?._id}
-                  />
-                ))}
-              {search &&
-                contacts.length > 0 &&
-                contacts.map((user, index) => (
-                  <div
-                    key={index}
-                    className={`contact ${search ? "bg-blue-2 rounded-xl px-2 py-2" : ""}  `}
-                    aria-disabled={selectedContacts.length === 0}
-                    onClick={(e) => handleContactClick(user)}
-                  >
-                    {/* {selectedContacts.find((item) => item === user) ? (
-                  <CheckCircle sx={{ color: "red" }} />
-                ) : (
-                  <RadioButtonUnchecked />
-                )} */}
-                    <>
-                      <img
-                        src={user.profileImage || "/assets/person.jpg"}
-                        alt="profile"
-                        className="profilePhoto"
-                      />
-                      <p className="text-base-bold">{user.username}</p>
-                    </>
+
+              <div
+                className={`${
+                  search
+                    ? "absolute w-full p-2 top-0  rounded-md flex flex-col gap-4"
+                    : ""
+                }`}
+              >
+                {contacts.length === 0 && chats.length === 0 && (
+                  <div className="w-full h-screen  rounded-xl  font-semibold ">
+                    Không tìm thấy liên hệ nào
                   </div>
-                ))}
+                )}
+                {search &&
+                  chats &&
+                  chats.length > 0 &&
+                  chats?.map((chat, index) => (
+                    <div>
+                      {chat?.name === search && (
+                        <ChatBox
+                          hidden
+                          chat={chat}
+                          index={index}
+                          currentUser={currentUser}
+                          currentChatId={chat?._id}
+                        />
+                      )}
+                    </div>
+                  ))}
+
+                {search &&
+                  contacts &&
+                  contacts?.length > 0 &&
+                  contacts?.map((user, index) => (
+                    <div
+                      key={index}
+                      className={`contact ${
+                        user?.username === search
+                          ? "bg-blue-2 rounded-xl px-2 py-2"
+                          : ""
+                      }  `}
+                      aria-disabled={selectedContacts.length === 0}
+                      onClick={(e) => handleContactClick(user)}
+                    >
+                      {user?.username === search && (
+                        <>
+                          <img
+                            src={user?.profileImage || "/assets/person.jpg"}
+                            alt="profile"
+                            className="profilePhoto"
+                          />
+                          <p className="text-base-bold">{user?.username}</p>
+                        </>
+                      )}
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

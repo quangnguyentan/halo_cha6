@@ -78,14 +78,20 @@ const ChatList = ({ currentChatId }) => {
       /> */}
 
       <div className="chats">
-        {chats?.map((chat, index) => (
-          <ChatBox
-            chat={chat}
-            index={index}
-            currentUser={currentUser}
-            currentChatId={currentChatId}
-          />
-        ))}
+        {chats?.length > 0 ? (
+          chats?.map((chat, index) => (
+            <ChatBox
+              chat={chat}
+              index={index}
+              currentUser={currentUser}
+              currentChatId={currentChatId}
+            />
+          ))
+        ) : (
+          <div className="w-full text-center">
+            <h3 className="font-semibold">Bạn chưa chat với bất cứ ai! </h3>
+          </div>
+        )}
       </div>
     </div>
   );

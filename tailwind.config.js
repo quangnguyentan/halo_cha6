@@ -122,6 +122,9 @@ module.exports = {
         "green-1": "#13E0E0",
         "pink-1": "#FDDAD6",
       },
+      height: {
+        "calc-full": "calc(100vh - 150px)",
+      },
     },
   },
   plugins: [],

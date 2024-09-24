@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 
-const ChatBox = ({ chat, currentUser, currentChatId }) => {
+const ChatBox = ({ chat, currentUser, currentChatId, hidden }) => {
   const otherMembers = chat?.members?.filter(
     (member) => member._id !== currentUser._id
   );
@@ -42,9 +42,13 @@ const ChatBox = ({ chat, currentUser, currentChatId }) => {
             <p className="text-base-bold">{otherMembers[0]?.username}</p>
           )}
 
-          {!lastMessage && <p className="text-small-bold">Started a chat</p>}
+          {hidden
+            ? ""
+            : !lastMessage && <p className="text-small-bold">Started a chat</p>}
 
-          {lastMessage?.photo ? (
+          {hidden ? (
+            ""
+          ) : lastMessage?.photo ? (
             lastMessage?.sender?._id === currentUser._id ? (
               <p className="text-small-medium text-grey-3">You sent a photo</p>
             ) : (
@@ -68,13 +72,17 @@ const ChatBox = ({ chat, currentUser, currentChatId }) => {
         </div>
       </div>
 
-      <div>
-        <p className="text-base-light text-grey-3">
-          {!lastMessage
-            ? format(new Date(chat?.createdAt), "p")
-            : format(new Date(chat?.lastMessageAt), "p")}
-        </p>
-      </div>
+      {hidden ? (
+        <h3 className="font-semibold text-small-medium">Nhóm</h3>
+      ) : (
+        <div>
+          <p className="text-base-light text-grey-3">
+            {!lastMessage
+              ? format(new Date(chat?.createdAt), "p")
+              : format(new Date(chat?.lastMessageAt), "p")}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

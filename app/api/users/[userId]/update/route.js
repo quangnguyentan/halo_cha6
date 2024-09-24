@@ -9,12 +9,11 @@ export const POST = async (req, { params }) => {
 
     const body = await req.json();
 
-    const { username, profileImage } = body;
-
-    const updatedUser = await User.findByIdAndUpdate(
+    const { profileImage } = body;
+    let updatedUser;
+    updatedUser = await User.findByIdAndUpdate(
       userId,
       {
-        username,
         profileImage,
       },
       { new: true }
@@ -23,6 +22,6 @@ export const POST = async (req, { params }) => {
     return new Response(JSON.stringify(updatedUser), { status: 200 });
   } catch (err) {
     console.log(err);
-    return new Response("Failed to update user", { status: 500 })
+    return new Response("Failed to update user", { status: 500 });
   }
 };
