@@ -441,7 +441,7 @@ const Contacts = () => {
                           flexDirection: "column",
                         }}
                       >
-                        {contacts && contacts?.length > 0 ? (
+                        {contacts ? (
                           contacts?.map((user, index) => (
                             <div
                               key={index}
