@@ -172,7 +172,7 @@ export const User = () => {
                 {contact?.role === "user" && (
                   <TableRow
                     onClick={() => handleClick(contact?._id)}
-                    cusId={contact?._id}
+                    cusId={contact?.email}
                     sku={contact?.username}
                     date={contact?.role}
                     order={1}
@@ -456,7 +456,7 @@ const TableHead = () => {
   return (
     <thead>
       <tr className="text-sm font-normal text-stone-500">
-        <th className="text-start p-1.5">Id người dùng</th>
+        <th className="text-start p-1.5">Email người dùng</th>
         <th className="text-start p-1.5">Tên</th>
         <th className="text-start p-1.5">Vai trò</th>
         <th className="w-8"></th>

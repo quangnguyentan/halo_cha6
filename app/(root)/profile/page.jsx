@@ -89,7 +89,7 @@ const Profile = () => {
         </div>
         <div className="flex items-center gap-4 ">
           <h3 className="font-semibold ">Mã giới thiệu của bạn:</h3>
-          <h3 className="font-semibold ">{user?.code}</h3>
+          {user?.code && <h3 className="font-semibold ">{user?.code}</h3>}
         </div>
 
         <button className="btn" type="submit">
