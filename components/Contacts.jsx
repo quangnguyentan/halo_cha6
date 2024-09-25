@@ -400,7 +400,7 @@ const Contacts = () => {
             <div className="flex items-center gap-2">
               <div className="w-1/4 max-sm:flex-none max-sm:hidden ">
                 <div
-                  className="flex gap-2 w-full items-center bg-gray-200 xl:py-2 justify-center lg:py-0 rounded-lg cursor-pointer"
+                  className="flex gap-2 w-full items-center bg-gray-200 xl:py-2 lg:py-0 justify-center rounded-lg cursor-pointer"
                   onClick={handleOpen}
                 >
                   <GroupIcon />
@@ -443,38 +443,42 @@ const Contacts = () => {
                           contacts?.map((user, index) => (
                             <div
                               key={index}
-                              className={`contact `}
+                              className={`contact`}
                               aria-disabled={selectedContacts.length === 0}
                               onClick={(e) => handleContactClick(user)}
                             >
-                              {user?.codeAddFriends === currentUser?.code && (
-                                <div className="flex gap-4 items-center">
-                                  <img
-                                    src={
-                                      user?.profileImage || "/assets/person.jpg"
-                                    }
-                                    alt="profile"
-                                    className="profilePhoto"
-                                  />
-                                  <p className="text-base-bold">
-                                    {user?.username}
-                                  </p>
-                                </div>
-                              )}
-                              {user?.code === currentUser?.codeAddFriends && (
-                                <div className="flex gap-4 items-center">
-                                  <img
-                                    src={
-                                      user?.profileImage || "/assets/person.jpg"
-                                    }
-                                    alt="profile"
-                                    className="profilePhoto"
-                                  />
-                                  <p className="text-base-bold">
-                                    {user?.username}
-                                  </p>
-                                </div>
-                              )}
+                              {currentUser?.role === "user" &&
+                                user?.code === currentUser?.codeAddFriends && (
+                                  <div className="flex gap-4 items-center">
+                                    <img
+                                      src={
+                                        user?.profileImage ||
+                                        "/assets/person.jpg"
+                                      }
+                                      alt="profile"
+                                      className="profilePhoto"
+                                    />
+                                    <p className="text-base-bold">
+                                      {user?.username}
+                                    </p>
+                                  </div>
+                                )}
+                              {currentUser?.role === "employee" &&
+                                user?.codeAddFriends === currentUser?.code && (
+                                  <div className="flex gap-4 items-center">
+                                    <img
+                                      src={
+                                        user?.profileImage ||
+                                        "/assets/person.jpg"
+                                      }
+                                      alt="profile"
+                                      className="profilePhoto"
+                                    />
+                                    <p className="text-base-bold">
+                                      {user?.username}
+                                    </p>
+                                  </div>
+                                )}
                             </div>
                           ))
                         ) : (
@@ -512,11 +516,6 @@ const Contacts = () => {
                     : ""
                 }`}
               >
-                {contacts.length === 0 && chats.length === 0 && (
-                  <div className="w-full h-screen  rounded-xl  font-semibold ">
-                    Không tìm thấy liên hệ nào
-                  </div>
-                )}
                 {search &&
                   chats &&
                   chats.length > 0 &&

@@ -2,18 +2,12 @@ import { Command } from "cmdk";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FiEye, FiLink, FiLogOut, FiPhone, FiPlus } from "react-icons/fi";
 
-export const CommandMenu = ({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) => {
+export const CommandMenu = ({ open, setOpen }) => {
   const [value, setValue] = useState("");
 
   // Toggle the menu when ⌘K is pressed
   useEffect(() => {
-    const down = (e: KeyboardEvent) => {
+    const down = (e) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((open) => !open);

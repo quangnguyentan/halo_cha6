@@ -9,8 +9,7 @@ const BottomBar = () => {
   const pathname = usePathname();
 
   const handleLogout = async () => {
-    signOut();
-    router.push("/");
+    signOut({ callbackUrl: "/" });
   };
 
   const { data: session } = useSession();

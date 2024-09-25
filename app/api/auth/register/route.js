@@ -8,7 +8,7 @@ export const POST = async (req, res) => {
 
     const body = await req.json();
 
-    const { username, email, password, code } = body;
+    const { username, email, password, code, role } = body;
     const existingUserName = await User.findOne({ username });
     const existingEmal = await User.findOne({ email });
     if (existingUserName) {
@@ -24,15 +24,16 @@ export const POST = async (req, res) => {
 
     const hashedPassword = await hash(password, 10);
     let hashCode = randomstring.generate({
-      length: 7,
-      charset: "alphabetic",
+      length: 6,
+      charset: "numeric",
     });
     const newUser = await User.create({
       username,
       email,
       password: hashedPassword,
-      code: hashCode,
-      codeAddFriends: code,
+      code: role && hashCode,
+      role: role ? "employee" : "user",
+      codeAddFriends: code && code,
     });
 
     await newUser.save();

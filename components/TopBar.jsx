@@ -10,8 +10,7 @@ const TopBar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const handleLogout = async () => {
-    signOut();
-    router.push("/");
+    signOut({ callbackUrl: "/" });
   };
 
   const { data: session } = useSession();
