@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { CldUploadButton } from "next-cloudinary";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 const Profile = () => {
   const { data: session } = useSession();
@@ -61,7 +62,7 @@ const Profile = () => {
       <h1 className="text-heading3-bold">Chỉnh sửa thông tin</h1>
 
       <form className="edit-profile" onSubmit={handleSubmit(updateUser)}>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-8">
           <img
             src={
               watch("profileImage") ||
@@ -69,16 +70,17 @@ const Profile = () => {
               "/assets/person.jpg"
             }
             alt="profile"
-            className="w-40 h-40 rounded-full"
+            className="w-40 h-40 rounded-full "
           />
           <CldUploadButton
             options={{ maxFiles: 1 }}
             onUpload={uploadPhoto}
             uploadPreset="i96i6rvi"
           >
-            <p className="text-body-bold">
-              Click vào đây để chỉnh sửa ảnh đại diện
-            </p>
+            <div className="flex items-center gap-2">
+              <FileUploadIcon />
+              <p className="text-body-bold">Tải ảnh lên</p>
+            </div>
           </CldUploadButton>
         </div>
         <div className="flex items-center gap-4 ">

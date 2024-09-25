@@ -8,7 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 const GroupInfo = () => {
   const [loading, setLoading] = useState(true);
   const [chat, setChat] = useState({});
@@ -114,7 +114,10 @@ const GroupInfo = () => {
                 onUpload={uploadPhoto}
                 uploadPreset="i96i6rvi"
               >
-                <p className="text-body-bold">Nhấn vào đây chỉnh sửa ảnh</p>
+                <div className="flex items-center gap-1">
+                  <FileUploadIcon />
+                  <p className="text-body-bold">Tải ảnh lên</p>
+                </div>
               </CldUploadButton>
             </div>
 
