@@ -28,7 +28,9 @@ const UserSchema = new mongoose.Schema({
   },
   code: {
     type: String,
-    default: "",
+  },
+  codeAddFriends: {
+    type: String,
   },
 });
 

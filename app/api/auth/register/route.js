@@ -31,7 +31,8 @@ export const POST = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      code: code ? code : hashCode,
+      code: hashCode,
+      codeAddFriends: code,
     });
 
     await newUser.save();

@@ -282,13 +282,18 @@ const ChatDetails = ({ chatId }) => {
                   (member) => member?._id === currentUser?._id
                 ).length > 0 ? (
                   <div className="flex items-center gap-4">
-                    <div
-                      className="flex items-center gap-2"
-                      onClick={() => setOpen(true)}
-                    >
-                      <PersonAddIcon />
-                      <button className="max-sm:hidden">Thêm thành viên</button>
-                    </div>
+                    {chat?.members &&
+                      chat?.members[0]?._id === currentUser?._id && (
+                        <div
+                          className="flex items-center gap-2"
+                          onClick={() => setOpen(true)}
+                        >
+                          <PersonAddIcon />
+                          <button className="max-sm:hidden">
+                            Thêm thành viên
+                          </button>
+                        </div>
+                      )}
 
                     <div
                       className="flex items-center gap-1"
@@ -431,15 +436,18 @@ const ChatDetails = ({ chatId }) => {
           <Box sx={style}>
             <h3 className="w-full text-center text-heading3-bold">Cài đặt</h3>
             <div className="flex flex-col justify-center gap-4 py-4">
-              <Link
-                href={`/chats/${chatId}/group-info`}
-                className="w-full rounded-lg  px-2 py-4 font-semibold bg-blue-500 text-white"
-              >
-                <div className="items-center flex gap-2 ">
-                  <ModeEditIcon />
-                  <button>Chỉnh sửa thông tin</button>
-                </div>
-              </Link>
+              {chat?.members && chat?.members[0]?._id === currentUser?._id && (
+                <Link
+                  href={`/chats/${chatId}/group-info`}
+                  className="w-full rounded-lg  px-2 py-4 font-semibold bg-blue-500 text-white"
+                >
+                  <div className="items-center flex gap-2 ">
+                    <ModeEditIcon />
+                    <button>Chỉnh sửa thông tin</button>
+                  </div>
+                </Link>
+              )}
+
               {chat?.members && chat?.members[0]?._id === currentUser?._id ? (
                 <div
                   className="w-full rounded-lg items-center flex gap-2 px-2 py-4 font-semibold bg-red-500 text-white"

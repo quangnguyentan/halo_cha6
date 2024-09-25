@@ -449,7 +449,21 @@ const Contacts = () => {
                               aria-disabled={selectedContacts.length === 0}
                               onClick={(e) => handleContactClick(user)}
                             >
-                              {user?.code === currentUser?.code && (
+                              {user?.codeAddFriends === currentUser?.code && (
+                                <div className="flex gap-4 items-center">
+                                  <img
+                                    src={
+                                      user?.profileImage || "/assets/person.jpg"
+                                    }
+                                    alt="profile"
+                                    className="profilePhoto"
+                                  />
+                                  <p className="text-base-bold">
+                                    {user?.username}
+                                  </p>
+                                </div>
+                              )}
+                              {user?.code === currentUser?.codeAddFriends && (
                                 <div className="flex gap-4 items-center">
                                   <img
                                     src={
