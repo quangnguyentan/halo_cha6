@@ -123,7 +123,8 @@ module.exports = {
         "pink-1": "#FDDAD6",
       },
       height: {
-        "calc-full": "calc(100vh - 150px)",
+        "calc-full": "calc(100vh - 170px)",
+        "calc-bottom": "calc(100vh - 170px)",
       },
     },
   },

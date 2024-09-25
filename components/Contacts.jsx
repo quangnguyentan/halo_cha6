@@ -393,24 +393,22 @@ const Contacts = () => {
                   onClick={handleOpen}
                 >
                   <GroupIcon />
-                  <p className="font-semibold ">Tạo nhóm</p>
+                  <p className="font-semibold text-heading2-bold">Tạo nhóm</p>
                 </button>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-1/4 max-sm:flex-none max-sm:hidden">
-                <button
-                  className="flex gap-2 w-full items-center "
+              <div className="w-1/4 max-sm:flex-none max-sm:hidden ">
+                <div
+                  className="flex gap-2 w-full items-center bg-gray-200 xl:py-2 justify-center lg:py-0 rounded-lg cursor-pointer"
                   onClick={handleOpen}
                 >
                   <GroupIcon />
                   <p className="text-small-medium font-semibold">Tạo nhóm</p>
-                </button>
+                </div>
               </div>
               <div className="lg:w-3/4 max-sm:w-full max-sm:px-2">
                 <input
-                  autoFocus
-                  autoComplete="off"
                   placeholder="Tìm người liên hệ..."
                   className="input-search w-full border"
                   value={search}

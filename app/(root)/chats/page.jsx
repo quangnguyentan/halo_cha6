@@ -7,7 +7,7 @@ const Chats = () => {
       {/* <div className="w-1/3 max-lg:w-1/2 max-md:w-full">
         <ChatList />
       </div> */}
-      <div className="w-1/3 max-lg:w-full flex-col  ">
+      <div className="w-1/3 max-lg:w-full flex-col">
         <Contacts />
       </div>
       <div className="w-2/3 flex items-center justify-center max-md:hidden">
