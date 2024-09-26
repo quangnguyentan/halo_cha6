@@ -21,7 +21,7 @@ export const POST = async (req) => {
     // Define "query" to find the chat
     const query = isGroup
       ? { isGroup, name, groupPhoto, members: [currentUserId, ...members] }
-      : { members: { $all: [currentUserId, ...members], $size: 2 } };
+      : { members: { $all: [currentUserId, ...members], $size: 1 } };
     let chat = await Chat.findOne(query);
     if (!chat && outGroup) {
       const findUser = await Chat.findById(chatIdGroup);
@@ -127,5 +127,18 @@ export const PUT = async (req) => {
   } catch (err) {
     console.error(err);
     return new Response("Failed to create a new chat", { status: 500 });
+  }
+};
+
+export const GET = async (req, res) => {
+  try {
+    await connectToDB();
+
+    const allChats = await Chat.find();
+    console.log(allChats.length);
+    return new Response(JSON.stringify(allChats), { status: 200 });
+  } catch (err) {
+    console.log(err);
+    return new Response("Failed to get all users", { status: 500 });
   }
 };

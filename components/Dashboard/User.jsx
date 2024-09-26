@@ -147,6 +147,7 @@ export const User = () => {
     setIdEdit(id);
     setOpenPut(true);
   };
+  console.log(contacts);
   return loading ? (
     <Loader />
   ) : (
@@ -172,8 +173,7 @@ export const User = () => {
                 {contact?.role === "user" && (
                   <TableRow
                     onClick={() => handleClick(contact?._id)}
-                    cusId={contact?.email}
-                    sku={contact?.username}
+                    cusId={contact?.username}
                     date={contact?.role}
                     order={1}
                     key={contact?._id}
@@ -209,7 +209,7 @@ export const User = () => {
                               },
                             })}
                             type="text"
-                            placeholder="Tên"
+                            placeholder="Tên đăng nhập"
                             className="input-field"
                           />
                           <PersonOutline sx={{ color: "#737373" }} />
@@ -220,23 +220,7 @@ export const User = () => {
                           </p>
                         )}
                       </div>
-                      <div>
-                        <div className="input">
-                          <input
-                            defaultValue=""
-                            {...register("email", {
-                              required: "Email là bắt buộc",
-                            })}
-                            type="email"
-                            placeholder="Email"
-                            className="input-field"
-                          />
-                          <EmailOutlined sx={{ color: "#737373" }} />
-                        </div>
-                        {errors.email && (
-                          <p className="text-red-500">{errors.email.message}</p>
-                        )}
-                      </div>
+
                       <div>
                         <div className="input">
                           <input
@@ -348,7 +332,6 @@ export const User = () => {
                             handleSubmit(
                               onEdit(idEdit, {
                                 username: watch("username"),
-                                email: watch("email"),
                                 password: watch("password"),
                               })
                             )
@@ -367,7 +350,7 @@ export const User = () => {
                                   },
                                 })}
                                 type="text"
-                                placeholder="Tên"
+                                placeholder="Tên đăng nhập"
                                 className="input-field"
                               />
                               <PersonOutline sx={{ color: "#737373" }} />
@@ -378,25 +361,7 @@ export const User = () => {
                               </p>
                             )}
                           </div>
-                          <div>
-                            <div className="input">
-                              <input
-                                defaultValue=""
-                                {...register("email", {
-                                  required: "Email là bắt buộc",
-                                })}
-                                type="email"
-                                placeholder="Email"
-                                className="input-field"
-                              />
-                              <EmailOutlined sx={{ color: "#737373" }} />
-                            </div>
-                            {errors.email && (
-                              <p className="text-red-500">
-                                {errors.email.message}
-                              </p>
-                            )}
-                          </div>
+
                           <div>
                             <div className="input">
                               <input
@@ -456,7 +421,6 @@ const TableHead = () => {
   return (
     <thead>
       <tr className="text-sm font-normal text-stone-500">
-        <th className="text-start p-1.5">Email người dùng</th>
         <th className="text-start p-1.5">Tên</th>
         <th className="text-start p-1.5">Vai trò</th>
         <th className="w-8"></th>
@@ -473,7 +437,6 @@ const TableRow = ({ cusId, sku, date, price, order, onClick }) => {
           {cusId}
         </a>
       </td>
-      <td className="p-1.5">{sku}</td>
       <td className="p-1.5">{date}</td>
       <td className="p-1.5">{price}</td>
       <td className="w-8">

@@ -4,6 +4,7 @@ import { Dashboard } from "@/components/Dashboard/Dashboard";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Customer } from "@components/Dashboard/Customer";
 import { User } from "@components/Dashboard/User";
+import { Group } from "@components/Dashboard/Group";
 
 export default function Home() {
   const [getIndex, setGetIndex] = useState("");
@@ -22,6 +23,7 @@ export default function Home() {
       {getIndex === "1" && <Dashboard />}
       {getIndex === "2" && <Customer />}
       {getIndex === "3" && <User />}
+      {getIndex === "4" && <Group />}
     </main>
   );
 }

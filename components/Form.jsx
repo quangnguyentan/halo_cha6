@@ -64,44 +64,26 @@ const Form = ({ type }) => {
         <img src="/assets/logo.png" alt="logo" className="logo" />
 
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
-          {type === "register" && (
-            <div>
-              <div className="input">
-                <input
-                  defaultValue=""
-                  {...register("username", {
-                    required: "Tên là bắt buộc",
-                    validate: (value) => {
-                      if (value.length < 3) {
-                        return "Tên phải lớn hơn 3 kí tự";
-                      }
-                    },
-                  })}
-                  type="text"
-                  placeholder="Tên tài khoản"
-                  className="input-field"
-                />
-                <PersonOutline sx={{ color: "#737373" }} />
-              </div>
-              {errors.username && (
-                <p className="text-red-500">{errors.username.message}</p>
-              )}
-            </div>
-          )}
-
           <div>
             <div className="input">
               <input
                 defaultValue=""
-                {...register("email", { required: "Email là bắt buộc" })}
-                type="email"
-                placeholder="Email"
+                {...register("username", {
+                  required: "Tên là bắt buộc",
+                  validate: (value) => {
+                    if (value.length < 3) {
+                      return "Tên phải lớn hơn 3 kí tự";
+                    }
+                  },
+                })}
+                type="text"
+                placeholder="Tên tài khoản"
                 className="input-field"
               />
-              <EmailOutlined sx={{ color: "#737373" }} />
+              <PersonOutline sx={{ color: "#737373" }} />
             </div>
-            {errors.email && (
-              <p className="text-red-500">{errors.email.message}</p>
+            {errors.username && (
+              <p className="text-red-500">{errors.username.message}</p>
             )}
           </div>
 

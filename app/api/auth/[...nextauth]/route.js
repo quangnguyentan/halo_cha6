@@ -78,16 +78,16 @@ const handler = NextAuth({
     CredentialsProvider({
       name: "Credentials",
       async authorize(credentials, req) {
-        if (!credentials.email || !credentials.password) {
-          throw new Error("Sai email hoặc mật khẩu");
+        if (!credentials.username || !credentials.password) {
+          throw new Error("Sai tên đăng nhập hoặc mật khẩu");
         }
 
         await connectToDB();
 
-        const user = await User.findOne({ email: credentials.email });
+        const user = await User.findOne({ username: credentials.username });
 
         if (!user || !user?.password) {
-          throw new Error("Sai email hoặc mật khẩu");
+          throw new Error("Sai tên đăng nhập hoặc mật khẩu");
         }
 
         const isMatch = await compare(credentials.password, user.password);
@@ -108,15 +108,15 @@ const handler = NextAuth({
       if (user) {
         token.id = user.id;
         token.role = user.role; // Lưu vai trò vào token
-        token.email = user.email; // Lưu vai trò vào token
-
-        console.log(token);
+        token.name = user.username;
       }
       return token;
     },
 
     async session({ session }) {
-      const mongodbUser = await User.findOne({ email: session.user.email });
+      const mongodbUser = await User.findOne({
+        username: session.user.name,
+      });
       session.user.id = mongodbUser._id.toString();
       session.user = { ...session.user, ...mongodbUser._doc };
       return session;

@@ -15,16 +15,17 @@ export async function middleware(req) {
   if (!token) {
     return NextResponse.redirect(new URL("/", req.url));
   }
-  console.log(url?.pathname);
   // Kiểm tra vai trò của người dùng
   if (token.role === "admin") {
-    // Nếu đã ở trang dashboard thì không cần chuyển hướng
-    if (url.pathname !== "/dashboard") {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
+    if (url.pathname === "/profile") {
+      return NextResponse.next();
+    } else {
+      if (url.pathname !== "/dashboard") {
+        return NextResponse.redirect(new URL("/dashboard", req.url));
+      }
     }
   }
-
-  return NextResponse.next(); // Tiếp tục nếu không cần chuyển hướng
+  return NextResponse.next();
 }
 
 export const config = {

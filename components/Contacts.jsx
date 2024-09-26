@@ -20,6 +20,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { X } from "lucide-react";
 const style = {
   position: "absolute",
   top: "50%",
@@ -88,7 +89,7 @@ const Contacts = () => {
   /* SELECT CONTACT */
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [addGroup, setAddGroup] = useState(false);
-  const isGroup = selectedContacts.length > 1;
+  const isGroup = selectedContacts.length >= 1;
   const handleSelect = (contact) => {
     //select a user to chat
     if (selectedContacts.includes(contact)) {
@@ -186,7 +187,7 @@ const Contacts = () => {
       router.push(`/chats/${chat._id}`);
     }
   };
-  console.log(selectedContacts);
+
   return loading ? (
     <Loader />
   ) : (
@@ -250,7 +251,7 @@ const Contacts = () => {
                     <input
                       autoFocus
                       autoComplete="off"
-                      placeholder="Search contact..."
+                      placeholder="Tìm kiếm người liên hệ"
                       className="input-search w-full border"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
@@ -347,6 +348,51 @@ const Contacts = () => {
                             )}
                           </>
                         ))}
+                      {/* {chats?.length > 0 &&
+                        chats?.map((chat, index) => (
+                          <>
+                            {!chat?.isGroup && (
+                              <div
+                                className="flex items-center px-4 hover:bg-gray-100"
+                                key={index}
+                                aria-disabled={selectedContacts.length === 0}
+                                onClick={(e) => {
+                                  handleSelect(chat);
+                                  setSearch("");
+                                }}
+                              >
+                                {selectedContacts.find(
+                                  (item) => item === chat
+                                ) ? (
+                                  <CheckCircle sx={{ color: "red" }} />
+                                ) : (
+                                  <RadioButtonUnchecked />
+                                )}
+                                <ChatBox
+                                  chat={chat}
+                                  index={index}
+                                  currentUser={currentUser}
+                                  hidden
+                                />
+                              </div>
+                            )}
+                          </>
+                        ))} */}
+                      {chats?.members?.map((user) => (
+                        <div className="flex gap-2 items-center">
+                          {selectedContacts.find((item) => item === user) ? (
+                            <CheckCircle sx={{ color: "red" }} />
+                          ) : (
+                            <RadioButtonUnchecked />
+                          )}
+                          <img
+                            src={user?.profileImage || "/assets/person.jpg"}
+                            alt="profile"
+                            className="profilePhoto"
+                          />
+                          <p className="text-base-bold">{user?.username}</p>
+                        </div>
+                      ))}
                     </div>
                     <div className="flex items-center w-full justify-end gap-4">
                       <button
@@ -364,8 +410,8 @@ const Contacts = () => {
                         className="text-sm font-semibold"
                         disabled={selectedContacts.length === 0}
                         onClick={() => {
-                          if (selectedContacts.length <= 1) {
-                            toast.error("Cần chọn 2 người trở lên");
+                          if (selectedContacts.length < 1) {
+                            toast.error("Cần chọn ít nhất 1 người");
                           } else {
                             setSearch("");
                             createGroupChat();

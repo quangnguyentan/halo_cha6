@@ -49,16 +49,16 @@ export const RouteSelect = () => {
           localStorage.setItem("index", 3);
         }}
       />
-      {/* <Route
+      <Route
         Icon={FiLink}
         selected={select === 4}
-        title="Integrations"
+        title="Quản lí nhóm"
         onClick={() => {
           handleSelect(4);
           localStorage.setItem("index", 4);
         }}
       />
-      <Route
+      {/* <Route
         Icon={FiDollarSign}
         selected={select === 5}
         title="Finance"

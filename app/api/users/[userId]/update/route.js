@@ -9,13 +9,22 @@ export const POST = async (req, { params }) => {
 
     const body = await req.json();
 
-    const { profileImage } = body;
+    const { profileImage, fullName } = body;
+    const findAllUser = await User.find();
+    const userExists = findAllUser?.some(
+      (user) =>
+        userId?.toString() !== user?._id?.toString() &&
+        user?.fullName === fullName
+    );
+    if (userExists) {
+      return new Response("Tên đã tồn tại", {
+        status: 400,
+      });
+    }
     let updatedUser;
     updatedUser = await User.findByIdAndUpdate(
       userId,
-      {
-        profileImage,
-      },
+      { fullName, profileImage },
       { new: true }
     );
 

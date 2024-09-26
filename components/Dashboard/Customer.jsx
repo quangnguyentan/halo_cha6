@@ -21,6 +21,7 @@ import {
 } from "@mui/icons-material";
 import Loader from "@components/Loader";
 import Link from "next/link";
+import useSWR from "swr";
 const style = {
   position: "absolute",
   top: "50%",
@@ -32,7 +33,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
+export const revalite = 60;
 export const Customer = () => {
   const [contacts, setContacts] = useState([]);
   const [search, setSearch] = useState("");
@@ -54,6 +55,15 @@ export const Customer = () => {
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+  const URL = "/api/users";
+  const { data } = useSWR(URL, fetcher);
+  const users = [];
+  for (const key in data) {
+    users.push(data[key]);
+  }
+  console.log(users);
   const getContacts = async () => {
     try {
       const res = await fetch(
@@ -137,6 +147,15 @@ export const Customer = () => {
       toast.error(errorMessage);
     }
   };
+
+  // const fetcher = (url) => fetch(url).then((res) => res.json());
+  // const { data, error, isLoading } = useSWR("/api/users", fetcher, {
+  //   revalidateIfStale: false,
+  //   revalidateOnFocus: false,
+  //   revalidateOnReconnect: false,
+  //   refreshInterval: 1000,
+  // });
+  // console.log("data", data);
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (currentUser) getContacts();
@@ -172,7 +191,6 @@ export const Customer = () => {
                 {contact?.code && (
                   <TableRow
                     onClick={() => handleClick(contact?._id)}
-                    cusId={contact?.email}
                     sku={contact?.username}
                     date={contact?.role}
                     price={contact?.code}
@@ -210,7 +228,7 @@ export const Customer = () => {
                               },
                             })}
                             type="text"
-                            placeholder="Tên"
+                            placeholder="Tên đăng nhập"
                             className="input-field"
                           />
                           <PersonOutline sx={{ color: "#737373" }} />
@@ -221,23 +239,7 @@ export const Customer = () => {
                           </p>
                         )}
                       </div>
-                      <div>
-                        <div className="input">
-                          <input
-                            defaultValue=""
-                            {...register("email", {
-                              required: "Email là bắt buộc",
-                            })}
-                            type="email"
-                            placeholder="Email"
-                            className="input-field"
-                          />
-                          <EmailOutlined sx={{ color: "#737373" }} />
-                        </div>
-                        {errors.email && (
-                          <p className="text-red-500">{errors.email.message}</p>
-                        )}
-                      </div>
+
                       <div>
                         <div className="input">
                           <input
@@ -349,7 +351,7 @@ export const Customer = () => {
                             handleSubmit(
                               onEdit(idEdit, {
                                 username: watch("username"),
-                                email: watch("email"),
+                                fullName: watch("fullname"),
                                 password: watch("password"),
                               })
                             )
@@ -368,7 +370,7 @@ export const Customer = () => {
                                   },
                                 })}
                                 type="text"
-                                placeholder="Tên"
+                                placeholder="Tên đăng nhập"
                                 className="input-field"
                               />
                               <PersonOutline sx={{ color: "#737373" }} />
@@ -379,25 +381,7 @@ export const Customer = () => {
                               </p>
                             )}
                           </div>
-                          <div>
-                            <div className="input">
-                              <input
-                                defaultValue=""
-                                {...register("email", {
-                                  required: "Email là bắt buộc",
-                                })}
-                                type="email"
-                                placeholder="Email"
-                                className="input-field"
-                              />
-                              <EmailOutlined sx={{ color: "#737373" }} />
-                            </div>
-                            {errors.email && (
-                              <p className="text-red-500">
-                                {errors.email.message}
-                              </p>
-                            )}
-                          </div>
+
                           <div>
                             <div className="input">
                               <input
@@ -457,8 +441,7 @@ const TableHead = () => {
   return (
     <thead>
       <tr className="text-sm font-normal text-stone-500">
-        <th className="text-start p-1.5">Email</th>
-        <th className="text-start p-1.5">Tên</th>
+        <th className="text-start p-1.5">Tên đăng nhập</th>
         <th className="text-start p-1.5">Vai trò</th>
         <th className="text-start p-1.5">Mã giới thiệu</th>
         <th className="w-8"></th>
@@ -470,11 +453,6 @@ const TableHead = () => {
 const TableRow = ({ cusId, sku, date, price, order, onClick }) => {
   return (
     <tr className={order % 2 ? "bg-stone-100 text-sm" : "text-sm"}>
-      <td className="p-1.5">
-        <a href="#" className="  flex items-center gap-1">
-          {cusId}
-        </a>
-      </td>
       <td className="p-1.5">{sku}</td>
       <td className="p-1.5">{date}</td>
       <td className="p-1.5">{price}</td>

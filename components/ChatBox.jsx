@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 
-const ChatBox = ({ chat, currentUser, currentChatId, hidden }) => {
+const ChatBox = ({ chat, currentUser, currentChatId = null, hidden }) => {
   const otherMembers = chat?.members?.filter(
     (member) => member._id !== currentUser._id
   );
@@ -73,7 +73,7 @@ const ChatBox = ({ chat, currentUser, currentChatId, hidden }) => {
       </div>
 
       {hidden ? (
-        <h3 className="font-semibold text-small-medium">Nhóm</h3>
+        ""
       ) : (
         <div>
           <p className="text-base-light text-grey-3">

@@ -10,7 +10,7 @@ export const GET = async (req, { params }) => {
     const searchedContacts = await User.find({
       $or: [
         { username: { $regex: query, $options: "i" } },
-        { email: { $regex: query, $options: "i" } },
+        { fullName: { $regex: query, $options: "i" } },
       ],
     });
 

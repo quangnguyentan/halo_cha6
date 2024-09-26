@@ -36,7 +36,6 @@ const ChatList = ({ currentChatId }) => {
   }, [currentUser, search]);
 
   useEffect(() => {
-    console.log(currentUser);
     if (currentUser) {
       pusherClient?.subscribe(currentUser._id);
 

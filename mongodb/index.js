@@ -11,11 +11,14 @@ export const connectToDB = async () => {
   }
 
   try {
-    await mongoose.connect(process.env.MONGODB_URL, {
-      dbName: "HaloChat",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(
+      "mongodb+srv://tanquanga6k10:CpdAVLjkbtX5chAq@shopdientu.l5fgtvm.mongodb.net/shopdientu?retryWrites=true&w=majority",
+      {
+        dbName: "HaloChat",
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
 
     isConnected = true;
 

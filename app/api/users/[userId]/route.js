@@ -58,7 +58,7 @@ export const PUT = async (req, { params }) => {
     // const query = params.query
     const body = await req.json();
 
-    const { username, email, password } = body;
+    const { username, fullName, password } = body;
     const { userId } = params;
     console.log(userId);
     let getUser = await User.find();
@@ -66,18 +66,20 @@ export const PUT = async (req, { params }) => {
       if (user?._id.toString() !== userId.toString()) {
         console.log(user);
 
-        if (user?.username === username) throw new Error("Tên đã tồn tại");
-        if (email === user?.email) throw new Error("Email đã tồn tại");
+        if (user?.username === username)
+          throw new Error("Tên đăng nhập đã tồn tại");
+        if (fullName === user?.fullName)
+          throw new Error("Tên tài khoản đã tồn tại");
       }
     });
 
     const hashedPassword = await hash(password, 10);
-    console.log(username, email, password);
+    console.log(username, password, fullName);
     const searchedChat = await User.findByIdAndUpdate(
       userId,
       {
+        fullName,
         username,
-        email,
         password: hashedPassword,
       },
       { new: true }

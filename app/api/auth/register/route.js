@@ -8,16 +8,10 @@ export const POST = async (req, res) => {
 
     const body = await req.json();
 
-    const { username, email, password, code, role } = body;
+    const { username, password, code, role } = body;
     const existingUserName = await User.findOne({ username });
-    const existingEmal = await User.findOne({ email });
     if (existingUserName) {
       return new Response("Tên đã tồn tại", {
-        status: 400,
-      });
-    }
-    if (existingEmal) {
-      return new Response("Email đã tồn tại", {
         status: 400,
       });
     }
@@ -29,7 +23,7 @@ export const POST = async (req, res) => {
     });
     const newUser = await User.create({
       username,
-      email,
+      fullName: username,
       password: hashedPassword,
       code: role && hashCode,
       role: role ? "employee" : "user",
