@@ -187,7 +187,14 @@ const Contacts = () => {
       router.push(`/chats/${chat._id}`);
     }
   };
-
+  const array = [];
+  chats?.map((el) =>
+    el?.members?.map(
+      (chat) =>
+        !el?.isGroup && chat?._id !== currentUser._id && array.push(chat)
+    )
+  );
+  console.log(selectedContacts);
   return loading ? (
     <Loader />
   ) : (
@@ -258,7 +265,7 @@ const Contacts = () => {
                     />
 
                     <div className="flex flex-col flex-1 gap-5 overflow-y-scroll custom-scrollbar">
-                      {selectedContacts?.map((selected, index) => (
+                      {/* {selectedContacts?.map((selected, index) => (
                         <div
                           key={index}
                           className="contact"
@@ -279,7 +286,7 @@ const Contacts = () => {
                           />
                           <p className="text-base-bold">{selected?.username}</p>
                         </div>
-                      ))}
+                      ))} */}
                       {search &&
                         contacts.map((user, index) => (
                           <>
@@ -392,6 +399,119 @@ const Contacts = () => {
                           />
                           <p className="text-base-bold">{user?.username}</p>
                         </div>
+                      ))}
+                      {array?.map((user, index) => (
+                        <>
+                          {selectedContacts.length > 0 ? (
+                            selectedContacts?.find(
+                              (sel) => sel?._id !== user?._id
+                            ) ? (
+                              <div
+                                key={index}
+                                className="contact"
+                                // aria-disabled={selectedContacts.length === 0}
+                                onClick={(e) => handleSelect(user)}
+                              >
+                                <div className="flex gap-2 items-center">
+                                  {selectedContacts.find(
+                                    (item) => item === user
+                                  ) ? (
+                                    <CheckCircle sx={{ color: "red" }} />
+                                  ) : (
+                                    <RadioButtonUnchecked />
+                                  )}
+                                  <img
+                                    src={
+                                      user?.profileImage || "/assets/person.jpg"
+                                    }
+                                    alt="profile"
+                                    className="profilePhoto"
+                                  />
+                                  <p className="text-base-bold">
+                                    {user?.username}
+                                  </p>
+                                </div>
+                              </div>
+                            ) : (
+                              <div
+                                key={index}
+                                className="contact"
+                                // aria-disabled={selectedContacts.length === 0}
+                                // onClick={(e) => handleSelect(user)}
+                              >
+                                <div className="flex gap-2 items-center">
+                                  {selectedContacts.find(
+                                    (item) => item === user
+                                  ) ? (
+                                    <CheckCircle sx={{ color: "red" }} />
+                                  ) : (
+                                    <RadioButtonUnchecked />
+                                  )}
+
+                                  <img
+                                    src={
+                                      user?.profileImage || "/assets/person.jpg"
+                                    }
+                                    alt="profile"
+                                    className="profilePhoto"
+                                  />
+                                  <p className="text-base-bold">
+                                    {user?.username}
+                                  </p>
+                                </div>
+                              </div>
+                            )
+                          ) : (
+                            <div
+                              key={index}
+                              className="contact"
+                              // aria-disabled={selectedContacts.length === 0}
+                              onClick={(e) => handleSelect(user)}
+                            >
+                              <div className="flex gap-2 items-center">
+                                {selectedContacts.find(
+                                  (item) => item === user
+                                ) ? (
+                                  <CheckCircle sx={{ color: "red" }} />
+                                ) : (
+                                  <RadioButtonUnchecked />
+                                )}
+                                <img
+                                  src={
+                                    user?.profileImage || "/assets/person.jpg"
+                                  }
+                                  alt="profile"
+                                  className="profilePhoto"
+                                />
+                                <p className="text-base-bold">
+                                  {user?.username}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                          {/* <div
+                            key={index}
+                            className="contact"
+                            // aria-disabled={selectedContacts.length === 0}
+                            onClick={(e) => handleSelect(user)}
+                          >
+                            <div className="flex gap-2 items-center">
+                              {selectedContacts.find(
+                                (item) => item === user
+                              ) ? (
+                                <CheckCircle sx={{ color: "red" }} />
+                              ) : (
+                                <RadioButtonUnchecked />
+                              )}
+                              <img
+                                src={user?.profileImage || "/assets/person.jpg"}
+                                alt="profile"
+                                className="profilePhoto"
+                              />
+                              <p className="text-base-bold">{user?.username}</p>
+                            </div>
+                          </div> */}
+                        </>
                       ))}
                     </div>
                     <div className="flex items-center w-full justify-end gap-4">
@@ -529,8 +649,7 @@ const Contacts = () => {
                           ))
                         ) : (
                           <h3 className="font-semibold">
-                            Chưa có bất kì bạn bè nào! Hãy nhập mã giới thiệu ở
-                            trong hồ sơ hoặc tìm kiếm để chat
+                            Chưa có bất kì bạn bè nào!
                           </h3>
                         )}
                       </Typography>

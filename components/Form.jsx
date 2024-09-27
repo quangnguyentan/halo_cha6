@@ -21,7 +21,6 @@ const Form = ({ type }) => {
   } = useForm();
 
   const router = useRouter();
-  console.log(watch("code"));
   const onSubmit = async (data) => {
     if (type === "register") {
       const res = await fetch("/api/auth/register", {

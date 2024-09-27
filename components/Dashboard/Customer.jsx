@@ -42,9 +42,15 @@ export const Customer = () => {
   let handleClose = () => setOpen(false);
   const [open, setOpen] = useState(false);
   const [openPut, setOpenPut] = useState(false);
-  let handleClosePut = () => setOpenPut(false);
+  let handleClosePut = () => {
+    setOpenPut(false);
+    localStorage.removeItem("username");
+    localStorage.removeItem("code");
+  };
   const { data: session } = useSession();
   const currentUser = session?.user;
+  const [value, setValue] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -63,7 +69,6 @@ export const Customer = () => {
   for (const key in data) {
     users.push(data[key]);
   }
-  console.log(users);
   const getContacts = async () => {
     try {
       const res = await fetch(
@@ -103,8 +108,6 @@ export const Customer = () => {
   };
   const onEdit = async (userId, data) => {
     setLoading(true);
-    console.log(userId);
-    console.log(data);
     const res = await fetch(`/api/users/${userId}/`, {
       method: "PUT",
       headers: {
@@ -129,7 +132,6 @@ export const Customer = () => {
   };
   const onDelete = async (userId) => {
     setLoading(true);
-    console.log(userId);
     const res = await fetch(`/api/users/${userId}/`, {
       method: "DELETE",
       headers: {
@@ -162,10 +164,12 @@ export const Customer = () => {
     }, 500);
     return () => clearTimeout(delayDebounceFn);
   }, [currentUser, search, loading]);
-  const handleClick = (id) => {
+  const handleClick = (id, contact) => {
     setIdEdit(id);
+    setValue(contact);
     setOpenPut(true);
   };
+
   return loading ? (
     <Loader />
   ) : (
@@ -190,7 +194,7 @@ export const Customer = () => {
               <>
                 {contact?.code && (
                   <TableRow
-                    onClick={() => handleClick(contact?._id)}
+                    onClick={() => handleClick(contact?._id, contact)}
                     sku={contact?.username}
                     date={contact?.role}
                     price={contact?.code}
@@ -218,7 +222,6 @@ export const Customer = () => {
                       <div>
                         <div className="input">
                           <input
-                            defaultValue=""
                             {...register("username", {
                               required: "Tên là bắt buộc",
                               validate: (value) => {
@@ -351,7 +354,7 @@ export const Customer = () => {
                             handleSubmit(
                               onEdit(idEdit, {
                                 username: watch("username"),
-                                fullName: watch("fullname"),
+                                code: watch("code"),
                                 password: watch("password"),
                               })
                             )
@@ -360,7 +363,7 @@ export const Customer = () => {
                           <div>
                             <div className="input">
                               <input
-                                defaultValue=""
+                                defaultValue={value?.username}
                                 {...register("username", {
                                   required: "Tên là bắt buộc",
                                   validate: (value) => {
@@ -382,6 +385,18 @@ export const Customer = () => {
                             )}
                           </div>
 
+                          <div>
+                            <div className="input">
+                              <input
+                                defaultValue={value?.code}
+                                {...register("code")}
+                                type="text"
+                                placeholder="Mã giới thiệu"
+                                className="input-field"
+                              />
+                              <CodeIcon sx={{ color: "#737373" }} />
+                            </div>
+                          </div>
                           <div>
                             <div className="input">
                               <input
@@ -413,7 +428,7 @@ export const Customer = () => {
                           </div>
 
                           <button className="button" type="submit">
-                            Tạo
+                            Chỉnh sửa
                           </button>
                         </form>
                       </div>

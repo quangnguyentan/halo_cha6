@@ -6,6 +6,7 @@ import Contacts from "@components/Contacts";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
+// Hàm lấy đường dẫn tĩnh cho các chat
 
 const ChatPage = () => {
   const { chatId } = useParams();
@@ -37,7 +38,7 @@ const ChatPage = () => {
     <div className="main-container">
       <div className="w-1/3 max-lg:hidden">
         {/* <ChatList currentChatId={chatId} /> */}
-        <Contacts/>
+        <Contacts />
       </div>
       <div className="w-2/3 max-lg:w-full">
         <ChatDetails chatId={chatId} />

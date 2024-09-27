@@ -1,24 +1,13 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/_not-found": "app/_not-found.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/chats/[chatId]/update/route": "app/api/chats/[chatId]/update/route.js",
-  "/api/chats/[chatId]/route": "app/api/chats/[chatId]/route.js",
-  "/api/chats/route": "app/api/chats/route.js",
   "/api/users/route": "app/api/users/route.js",
-  "/api/auth/register/route": "app/api/auth/register/route.js",
-  "/api/users/[userId]/searchChat/[query]/route": "app/api/users/[userId]/searchChat/[query]/route.js",
   "/api/users/[userId]/route": "app/api/users/[userId]/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/api/users/searchContact/[query]/route": "app/api/users/searchContact/[query]/route.js",
-  "/api/users/[userId]/change/route": "app/api/users/[userId]/change/route.js",
-  "/api/users/[userId]/update/route": "app/api/users/[userId]/update/route.js",
-  "/api/messages/route": "app/api/messages/route.js",
+  "/api/users/[userId]/searchChat/[query]/route": "app/api/users/[userId]/searchChat/[query]/route.js",
   "/(auth)/page": "app/(auth)/page.js",
-  "/(auth)/register/page": "app/(auth)/register/page.js",
-  "/(root)/chats/[chatId]/page": "app/(root)/chats/[chatId]/page.js",
-  "/(root)/chats/[chatId]/group-info/page": "app/(root)/chats/[chatId]/group-info/page.js",
+  "/(root)/dashboard/page": "app/(root)/dashboard/page.js",
   "/(root)/profile/page": "app/(root)/profile/page.js",
   "/(root)/chats/page": "app/(root)/chats/page.js",
-  "/(root)/dashboard/page": "app/(root)/dashboard/page.js",
-  "/(root)/contacts/page": "app/(root)/contacts/page.js"
+  "/(root)/chats/[chatId]/page": "app/(root)/chats/[chatId]/page.js"
 }

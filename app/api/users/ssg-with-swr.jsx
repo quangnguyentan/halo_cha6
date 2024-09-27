@@ -3,11 +3,7 @@ import { Customer } from "@components/Dashboard/Customer";
 import React from "react";
 import { SWRConfig } from "swr";
 const Page = ({ fallback }) => {
-  return (
-    <SWRConfig value={{ fallback }}>
-      <Customer />
-    </SWRConfig>
-  );
+  return <SWRConfig value={{ fallback }}>{/* <Customer /> */}</SWRConfig>;
 };
 
 export async function getStaticProps() {
